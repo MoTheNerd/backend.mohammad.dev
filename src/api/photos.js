@@ -15,10 +15,14 @@ export default ({ db, space }) => resource({
 
         callback(err, photo);
     },
+    /** PUT /:id - Update a given entity */
+    // async update(req, res) {
+        
+    // },
 
     /** GET / - List all entities */
-    index({ params }, res) {
-        res.json("photos");
+    async index({ params }, res) {
+        res.json(await db.collection('photos').find().toArray());
     },
 
     /** POST / - Create a new entity */
@@ -29,14 +33,9 @@ export default ({ db, space }) => resource({
         })
     },
 
-    /** GET /:id - Return a given entity */
-    read({ photo }, res) {
-        res.json(photo);
-    },
-
     /** DELETE /:id - Delete a given entity */
-    delete({ photo }, res) {
-        // photos.splice(photos.indexOf(photo), 1);
-        res.sendStatus(204);
-    }
+    // delete({ photo }, res) {
+    //     // photos.splice(photos.indexOf(photo), 1);
+    //     res.sendStatus(204);
+    // }
 });

@@ -35,11 +35,11 @@ const initializeSpace = () => {
 				bucket: 'moserver',
 				acl: 'public-read',
 				key: async function (request, file, callback) {
-					let inserted = await db.collection('photos').insertOne({ name: req.params })
-					await db.collection('photos').updateOne({ "_id": new ObjectID(inserted.insertedId) }, { $set: { "path": `https://moserver.sfo2/digitaloceanspaces.com/photos/${inserted.insertedId}` } })
+					let inserted = await db.collection('photos').insertOne({})
+					await db.collection('photos').updateOne({ "_id": new ObjectID(inserted.insertedId) }, { $set: { "path": `https://moserver.sfo2/digitaloceanspaces.com/${process.env.ENVIR === 'prod' ? "prod" : "dev"}/photos/${inserted.insertedId.toString()}.${file.mimetype === "image/jpeg" ? "jpg" : "png"}` } })
 					console.log(inserted.insertedId)
 					console.log(file);
-					callback(null, `photos/${inserted.insertedId.toString()}.${file.mimetype === "image/jpeg" ? "jpg" : "png"}`);
+					callback(null, `${process.env.ENVIR === 'prod' ? "prod" : "dev"}/photos/${inserted.insertedId.toString()}.${file.mimetype === "image/jpeg" ? "jpg" : "png"}`);
 				}
 			})
 		}).array('upload', 1)(req, res, next);
